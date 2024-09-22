@@ -5,14 +5,32 @@ const CHANGE_INPUT = 'CHANGE_INPUT'
 const RESET_FORM = 'RESET_FORM'
 
 // 👇 create your initial state object here
+const initialState = {
+  authorName: '',
+  quoteText: ''
+}
 
 // 👇 create your reducer function here
 
+const reducer = (state, action) => {
+  switch(action.type) {
+    case CHANGE_INPUT: {
+      const {name, value} = action.payload
+      return {...state, [name]: value}
+    }
+    case RESET_FORM: {
+      return {...state}
+    }
+  }
+}
+
 export default function TodoForm({ createQuote = () => { } }) {
   // 👇 use the reducer hook to spin up state and dispatch
+  const [state, dispatch] = useReducer(reducer, initialState)
 
-  const onChange = () => {
+  const onChange = ({target: {name, value}}) => {
     // 👇 implement
+    dispatch({type: CHANGE_INPUT, payload: {name, value}})
   }
   const resetForm = () => {
     // 👇 implement
@@ -28,6 +46,7 @@ export default function TodoForm({ createQuote = () => { } }) {
       <h3>New Quote Form</h3>
       <label><span>Author:</span>
         <input
+          value={state.authorName}
           type='text'
           name='authorName'
           placeholder='type author name'
