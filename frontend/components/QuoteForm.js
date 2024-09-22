@@ -1,4 +1,5 @@
-import React from 'react' // 👈 you'll need the reducer hook
+import React, {useReducer} from 'react' // 👈 you'll need the reducer hook
+
 
 // 👇 these are the types of actions that can change state
 const CHANGE_INPUT = 'CHANGE_INPUT'
@@ -19,12 +20,12 @@ const reducer = (state, action) => {
       return {...state, [name]: value}
     }
     case RESET_FORM: {
-      return {...state}
+      return {authorName: '', quoteText: ''}
     }
   }
 }
 
-export default function TodoForm({ createQuote = () => { } }) {
+export default function TodoForm({createQuote}) {
   // 👇 use the reducer hook to spin up state and dispatch
   const [state, dispatch] = useReducer(reducer, initialState)
 
@@ -34,9 +35,13 @@ export default function TodoForm({ createQuote = () => { } }) {
   }
   const resetForm = () => {
     // 👇 implement
+    dispatch({type: RESET_FORM})
   }
-  const onNewQuote = () => {
+  const onNewQuote = (evt) => {
     // 👇 implement
+    evt.preventDefault()
+    const {authorName, quoteText} = state
+    createQuote({authorName, quoteText})
     resetForm()
   }
 
